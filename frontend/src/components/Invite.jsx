@@ -8,9 +8,9 @@ const venue2 = "https://images.pexels.com/photos/16120230/pexels-photo-16120230.
 const couple = "https://images.unsplash.com/photo-1707193392435-c789b2845ea8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxlZGl0b3JpYWwlMjB3ZWRkaW5nJTIwY291cGxlJTIwZmlsbXxlbnwwfHx8fDE3NzY4OTk2MjZ8MA&ixlib=rb-4.1.0&q=85";
 
 const story = [
-    { year: "2019", title: "The first hello", body: "A rainy café in Bangalore, a borrowed umbrella, and a conversation that lasted until the lights went out." },
-    { year: "2022", title: "The long road", body: "Two cities, one playlist. Letters written on napkins and a promise to always come back home to each other." },
-    { year: "2025", title: "The proposal", body: "On the rooftop of her grandmother's house, under a sky full of kites and jasmine, she said yes." },
+    { year: "2019", title: "The first hello", body: "A quiet coffee shop in San Jose, a borrowed pen, and a conversation that somehow outlasted three refills." },
+    { year: "2022", title: "The long road", body: "Two cities, one shared playlist. Late-night calls, weekend flights, and a promise to always come back home to each other." },
+    { year: "2025", title: "The proposal", body: "On a golden California evening, beneath a sky blushing with sunset, he asked — and she said yes." },
     { year: "2026", title: "Forever", body: "And now, dearest friend, we ask you to witness the next chapter." },
 ];
 
@@ -117,7 +117,7 @@ export function Invite({ wedding, guestName }) {
                                 <div className="mt-4 font-sans uppercase tracking-[0.3em] text-xs text-stone-500">Ceremony</div>
                                 <h3 className="mt-2 font-serif text-3xl">{timeStr}</h3>
                                 <p className="mt-3 font-sans text-stone-600">{wedding.ceremony_venue}</p>
-                                <p className="mt-6 font-serif italic text-stone-500">Vows beneath the marigold canopy.</p>
+                                <p className="mt-6 font-serif italic text-stone-500">Vows beneath a canopy of California blooms.</p>
                             </div>
                         </Reveal>
                         <Reveal delay={80}>
@@ -141,7 +141,7 @@ export function Invite({ wedding, guestName }) {
                             <p className="font-sans uppercase tracking-[0.3em] text-xs text-stone-500">Where</p>
                             <h2 className="mt-3 font-serif text-4xl sm:text-5xl">{wedding.ceremony_venue.split(",")[0]}</h2>
                             <p className="mt-4 font-sans text-stone-600 leading-relaxed">
-                                A palace by the lake, where arches open onto still water and the air smells of neem and night jasmine. We can't imagine a more fitting place to say 'I do'.
+                                A sun-drenched garden in the heart of San Jose, where string lights catch the California dusk and the air hums with summer. We can't imagine a more fitting place to say 'I do'.
                             </p>
                             <div className="mt-6 inline-flex items-center gap-2 text-burgundy">
                                 <MapPin className="w-4 h-4" />

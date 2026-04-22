@@ -47,12 +47,12 @@ class GuestCreate(BaseModel):
 
 class WeddingInfo(BaseModel):
     model_config = ConfigDict(extra="ignore")
-    bride_name: str = "Ananya"
-    groom_name: str = "Arjun"
-    wedding_date: str = "2026-12-14T17:00:00"
-    ceremony_venue: str = "The Rosewood Garden, Udaipur"
-    reception_venue: str = "Lake Pichola Pavilion, Udaipur"
-    hashtag: str = "#AnanyaForArjun"
+    bride_name: str = "Divya"
+    groom_name: str = "Anmol"
+    wedding_date: str = "2026-06-28T17:00:00"
+    ceremony_venue: str = "The Grand Pavilion, San Jose, California"
+    reception_venue: str = "Garden Terrace, San Jose, California"
+    hashtag: str = "#DivyaAndAnmol"
 
 
 @api_router.get("/")

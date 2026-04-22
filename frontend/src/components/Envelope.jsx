@@ -55,7 +55,7 @@ export function Envelope({ guestName = "Our Dearest Friend", onOpened }) {
                             {guestName}
                         </div>
                         <div className="mt-1 font-serif italic text-[10px] sm:text-xs text-stone-500">
-                            — 14 · Dec · 2026 · Udaipur —
+                            — 28 · Jun · 2026 · San Jose —
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@ export function Envelope({ guestName = "Our Dearest Friend", onOpened }) {
                     aria-label="Open the envelope"
                     data-testid="open-envelope-button"
                 >
-                    A&amp;A
+                    D&amp;A
                 </button>
             </div>
 

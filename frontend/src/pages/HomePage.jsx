@@ -6,7 +6,7 @@ export default function HomePage() {
         <div className="min-h-screen paper-bg flex items-center justify-center px-6">
             <div className="max-w-xl text-center animate-fade-up">
                 <p className="font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-stone-500">
-                    Ananya &amp; Arjun
+                    Divya &amp; Anmol
                 </p>
                 <h1 className="mt-6 font-serif text-5xl sm:text-7xl leading-none text-ink">
                     A wedding<br />
@@ -34,7 +34,7 @@ export default function HomePage() {
                 </div>
 
                 <p className="mt-16 font-serif italic text-stone-500 text-sm">
-                    14 · December · 2026 &nbsp;·&nbsp; Udaipur
+                    28 · June · 2026 &nbsp;·&nbsp; San Jose, California
                 </p>
             </div>
         </div>
