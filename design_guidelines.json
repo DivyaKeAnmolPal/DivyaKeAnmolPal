@@ -1,0 +1,100 @@
+{
+  "theme": "light",
+  "archetype": "Archetype 1: Organic & Earthy",
+  "design_philosophy": "Elegant, tactile, and editorial. Evokes the physical touch of premium cotton paper and wax seals. It uses high-contrast serif typography paired with clean sans-serif for modern readability. The animation should feel deliberate and physics-based.",
+  "colors": {
+    "background": "#FAF9F6",
+    "surface": "#FFFFFF",
+    "surface_alt": "#F5F5F0",
+    "text_primary": "#1C1C1C",
+    "text_secondary": "#4A4A4A",
+    "accent_primary": "#8B1C31",
+    "accent_secondary": "#4A5D23",
+    "border": "#E5E5E0"
+  },
+  "typography": {
+    "font_primary": "Cormorant Garamond",
+    "font_secondary": "Outfit",
+    "headings": {
+      "h1": "font-serif text-5xl sm:text-6xl md:text-7xl tracking-tighter text-stone-900 leading-none",
+      "h2": "font-serif text-3xl sm:text-4xl tracking-tight text-stone-800",
+      "h3": "font-serif text-2xl tracking-normal text-stone-800",
+      "subtitle": "font-sans uppercase text-xs tracking-[0.2em] text-stone-500"
+    },
+    "body": "font-sans text-base text-stone-600 leading-relaxed"
+  },
+  "spacing_and_layout": {
+    "section_padding": "py-24 sm:py-32 px-6 sm:px-12",
+    "container": "max-w-5xl mx-auto",
+    "grid_bento": "grid grid-cols-1 md:grid-cols-12 gap-8",
+    "borders": "border border-stone-200 rounded-sm"
+  },
+  "components": {
+    "envelope_animation": {
+      "structure": "A centered container holding '.envelope-wrapper'. Inside: '.envelope-back', '.letter' (with dynamic guest name), '.envelope-front' (borders CSS trick or SVG), '.envelope-flap' (top triangle), and '.wax-seal'.",
+      "css_rules": {
+        "envelope_container": "relative w-[300px] sm:w-[400px] h-[200px] sm:h-[250px] mx-auto perspective-1000",
+        "envelope_flap": "absolute top-0 left-0 w-full h-[60%] bg-[#E5E5E0] origin-top transition-transform duration-700 ease-in-out z-40 border-b border-stone-300",
+        "envelope_flap_open": "rotate-x-[180deg] z-10",
+        "letter": "absolute bottom-0 w-[90%] left-[5%] h-full bg-white transition-all duration-1000 delay-500 ease-out z-20 shadow-md p-6 flex flex-col items-center justify-center",
+        "letter_open": "translate-y-[-80%] z-30 scale-110",
+        "wax_seal": "absolute bottom-[-20px] left-1/2 -translate-x-1/2 w-12 h-12 bg-[#8B1C31] rounded-full z-50 transition-all duration-300 shadow-lg cursor-pointer flex items-center justify-center text-white font-serif text-xl",
+        "wax_seal_open": "opacity-0 scale-50 pointer-events-none"
+      },
+      "orchestration": "1. User clicks envelope (wax seal). 2. Wax seal fades out/breaks. 3. Flap rotates 180deg (opens). 4. Letter slides up and out. 5. Wait 1 second, then fade out the envelope container and smoothly route/transition to the main invite page."
+    },
+    "timeline": {
+      "style": "Vertical line down the center. Alternating content blocks. Use generous padding (p-8) inside minimalist soft-rounded (rounded-sm) cards with subtle ambient shadows or pure 1px borders."
+    },
+    "buttons": {
+      "primary": "bg-[#8B1C31] text-white px-8 py-3 rounded-sm hover:bg-[#6b1425] transition-colors font-sans uppercase tracking-widest text-sm inline-flex items-center justify-center",
+      "secondary": "border border-stone-300 bg-transparent text-stone-800 px-8 py-3 rounded-sm hover:bg-stone-50 transition-colors font-sans uppercase tracking-widest text-sm inline-flex items-center justify-center"
+    }
+  },
+  "media": {
+    "hero_background": {
+      "url": "https://images.pexels.com/photos/20180399/pexels-photo-20180399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Romantic outdoor wedding ceremony with vintage light effects, used for the main hero section."
+    },
+    "paper_texture": {
+      "url": "https://images.unsplash.com/photo-1737276783889-0387aac3b6ee?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwzfHxvZmYtd2hpdGUlMjBwYXBlciUyMHRleHR1cmV8ZW58MHx8fHwxNzc2ODk5NjMwfDA&ixlib=rb-4.1.0&q=85",
+      "description": "Cream textured background. Apply as a fixed background with mix-blend-multiply and low opacity (10-20%) to give the entire page a tactile paper feel."
+    },
+    "wax_seal_reference": {
+      "url": "https://images.unsplash.com/photo-1578531506902-49f183f11ea2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTV8MHwxfHNlYXJjaHwzfHx3YXglMjBzZWFsJTIwc3RhbXAlMjBvbiUyMHBhcGVyfGVufDB8fHx8MTc3Njg5OTYzNHww&ixlib=rb-4.1.0&q=85",
+      "description": "Reference for styling the CSS wax seal."
+    },
+    "venue_gallery_1": {
+      "url": "https://images.unsplash.com/photo-1763553113391-a659bee36e06?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwd2VkZGluZyUyMHZlbnVlJTIwdGFibGV8ZW58MHx8fHwxNzc2ODk5NjMwfDA&ixlib=rb-4.1.0&q=85",
+      "description": "Elegant wedding reception tables with floral decorations."
+    },
+    "venue_gallery_2": {
+      "url": "https://images.pexels.com/photos/16120230/pexels-photo-16120230.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Beautifully decorated wedding venue with vibrant floral arrangements."
+    },
+    "couple_gallery_1": {
+      "url": "https://images.unsplash.com/photo-1707193392435-c789b2845ea8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxlZGl0b3JpYWwlMjB3ZWRkaW5nJTIwY291cGxlJTIwZmlsbXxlbnwwfHx8fDE3NzY4OTk2MjZ8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Black and white photo of bride and groom."
+    }
+  },
+  "testing_attributes": {
+    "envelope_button": "data-testid='open-envelope-button'",
+    "guest_name_display": "data-testid='guest-name-display'",
+    "countdown_timer": "data-testid='countdown-timer'",
+    "admin_guest_list": "data-testid='admin-guest-list'",
+    "add_guest_input": "data-testid='add-guest-input'",
+    "add_guest_submit": "data-testid='add-guest-submit'",
+    "copy_link_button": "data-testid='copy-link-button'"
+  },
+  "instructions_to_main_agent": [
+    "Setup 'Cormorant Garamond' and 'Outfit' via Google Fonts in index.html. DO NOT use generic fonts like Inter, Roboto, or standard sans-serif for headings.",
+    "Extend Tailwind configuration with the custom colors provided: background, surface, text_primary, accent_primary (#8B1C31), accent_secondary (#4A5D23).",
+    "Implement the landing page at /invite/:guestSlug. Read the guestSlug param and display it dynamically as 'To: [Guest Name]' on the envelope exterior and 'Dearest [Guest Name]' on the letter inside.",
+    "Build the envelope using pure CSS and Tailwind. Follow the 'envelope_animation' rules in this JSON. Ensure physics-based stagger: 1. Click seal 2. Flap rotates 3. Letter slides up 4. Transition to main invite.",
+    "For the main invite, implement these vertical sections: Hero (large names, date, background image), Our Story (timeline), Event Schedule (Ceremony + Reception details), Venue info, Photo Gallery (bento grid layout), Countdown timer.",
+    "Ensure layout breathes. Use py-24 or py-32 for section padding. Embrace negative space.",
+    "On the /guests route, build an admin tool. Display a list of guests using Shadcn Table or List components. Include a form to add a new guest name (which generates a slug), and a button to copy their personalized /invite/:guestSlug URL.",
+    "Include 'lucide-react' icons for UI elements, but keep them minimal.",
+    "Apply all 'data-testid' attributes to interactive elements to ensure automated testing succeeds."
+  ]
+}
