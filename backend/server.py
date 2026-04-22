@@ -1,12 +1,13 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
+import re
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 
@@ -14,59 +15,107 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create the main app without a prefix
 app = FastAPI()
-
-# Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
+def slugify(name: str) -> str:
+    s = name.lower().strip()
+    s = re.sub(r"[^a-z0-9\s-]", "", s)
+    s = re.sub(r"\s+", "-", s)
+    s = re.sub(r"-+", "-", s)
+    return s.strip("-")
+
+
+class Guest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    name: str
+    slug: str
+    message: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
 
-# Add your routes to the router instead of directly to app
+class GuestCreate(BaseModel):
+    name: str
+    message: Optional[str] = None
+
+
+class WeddingInfo(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    bride_name: str = "Ananya"
+    groom_name: str = "Arjun"
+    wedding_date: str = "2026-12-14T17:00:00"
+    ceremony_venue: str = "The Rosewood Garden, Udaipur"
+    reception_venue: str = "Lake Pichola Pavilion, Udaipur"
+    hashtag: str = "#AnanyaForArjun"
+
+
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Wedding Invite API"}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+@api_router.get("/wedding", response_model=WeddingInfo)
+async def get_wedding_info():
+    doc = await db.wedding_info.find_one({}, {"_id": 0})
+    if doc:
+        return WeddingInfo(**doc)
+    info = WeddingInfo()
+    await db.wedding_info.insert_one(info.model_dump())
+    return info
 
-# Include the router in the main app
+
+@api_router.post("/guests", response_model=Guest)
+async def create_guest(payload: GuestCreate):
+    base_slug = slugify(payload.name)
+    if not base_slug:
+        raise HTTPException(status_code=400, detail="Invalid name")
+
+    slug = base_slug
+    n = 1
+    while await db.guests.find_one({"slug": slug}):
+        n += 1
+        slug = f"{base_slug}-{n}"
+
+    guest = Guest(name=payload.name.strip(), slug=slug, message=payload.message)
+    doc = guest.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.guests.insert_one(doc)
+    return guest
+
+
+@api_router.get("/guests", response_model=List[Guest])
+async def list_guests():
+    items = await db.guests.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    for g in items:
+        if isinstance(g.get('created_at'), str):
+            g['created_at'] = datetime.fromisoformat(g['created_at'])
+    return items
+
+
+@api_router.get("/guests/{slug}", response_model=Guest)
+async def get_guest(slug: str):
+    g = await db.guests.find_one({"slug": slug}, {"_id": 0})
+    if not g:
+        raise HTTPException(status_code=404, detail="Guest not found")
+    if isinstance(g.get('created_at'), str):
+        g['created_at'] = datetime.fromisoformat(g['created_at'])
+    return g
+
+
+@api_router.delete("/guests/{slug}")
+async def delete_guest(slug: str):
+    result = await db.guests.delete_one({"slug": slug})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Guest not found")
+    return {"ok": True}
+
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -77,12 +126,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
