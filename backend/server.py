@@ -236,9 +236,11 @@ async def serve_file(path: str):
     try:
         data, ct = get_object(path)
         return Response(content=data, media_type=ct)
-    except requests.HTTPError as e:
-        status = e.response.status_code if e.response is not None else 500
-        raise HTTPException(status_code=404 if status == 404 else 500, detail="File not found")
+    except requests.HTTPError:
+        raise HTTPException(status_code=404, detail="File not found")
+    except Exception as e:
+        logger.error(f"serve_file error for {path}: {e}")
+        raise HTTPException(status_code=404, detail="File not found")
 
 
 app.include_router(api_router)
