@@ -1,14 +1,15 @@
 import { Countdown } from "./Countdown";
 import { Reveal } from "./Reveal";
 import { Guestbook } from "./Guestbook";
-import { Flourish, BotanicalStem, LeafBadge, Butterfly, HeartDoodle } from "./Botanicals";
+import { Flourish, MarigoldGarland, MarigoldBadge, Butterfly, HeartDoodle, Paisley, Sunburst } from "./Botanicals";
 import { MapPin, Music, Sparkles, Youtube, Clock } from "lucide-react";
 
 const galleryImgs = [
-    "https://images.unsplash.com/photo-1707193392435-c789b2845ea8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxlZGl0b3JpYWwlMjB3ZWRkaW5nJTIwY291cGxlJTIwZmlsbXxlbnwwfHx8fDE3NzY4OTk2MjZ8MA&ixlib=rb-4.1.0&q=85",
-    "https://images.pexels.com/photos/16120230/pexels-photo-16120230.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    "https://images.unsplash.com/photo-1763553113391-a659bee36e06?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwd2VkZGluZyUyMHZlbnVlJTIwdGFibGV8ZW58MHx8fHwxNzc2ODk5NjMwfDA&ixlib=rb-4.1.0&q=85",
-    "https://images.pexels.com/photos/20180399/pexels-photo-20180399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    "/brand/photos/p5.JPG",
+    "/brand/photos/p4.jpg",
+    "/brand/photos/p3.jpg",
+    "/brand/photos/p2.jpg",
+    "/brand/photos/p1.jpg",
 ];
 
 const sangeetItinerary = [
@@ -29,7 +30,7 @@ const weddingItinerary = [
 function EventCard({ tag, title, dateLabel, pst, ist, location, comingSoonStream }) {
     return (
         <div className="frame p-8 sm:p-10 text-center relative">
-            <LeafBadge className="mx-auto w-14 h-14" />
+            <MarigoldBadge className="mx-auto w-14 h-14" />
             <p className="mt-4 font-sans uppercase tracking-[0.3em] text-[11px] text-maroon">{tag}</p>
             <h3 className="mt-3 font-serif text-3xl sm:text-4xl text-ink">{title}</h3>
             <p className="mt-4 font-sans text-stone-700">{dateLabel}</p>
@@ -61,8 +62,8 @@ export function Invite({ wedding, guestName, note }) {
 
     return (
         <div className="paper-bg min-h-screen relative overflow-hidden" data-testid="invite-page">
-            <BotanicalStem className="botanical-side-left animate-sway" />
-            <BotanicalStem className="botanical-side-right animate-sway" />
+            <MarigoldGarland className="botanical-side-left" />
+            <MarigoldGarland className="botanical-side-right" />
 
             {/* Hero with logo centerpiece */}
             <section className="relative pt-16 sm:pt-24 pb-16 sm:pb-24 px-6">
@@ -130,7 +131,9 @@ export function Invite({ wedding, guestName, note }) {
             </section>
 
             {/* The Celebrations */}
-            <section className="py-20 sm:py-28 px-6">
+            <section className="py-20 sm:py-28 px-6 relative">
+                <Paisley className="absolute left-6 top-12 w-12 opacity-40 hidden sm:block" />
+                <Paisley className="absolute right-6 top-20 w-12 opacity-40 -scale-x-100 hidden sm:block" />
                 <div className="max-w-5xl mx-auto">
                     <Reveal>
                         <div className="text-center">
@@ -212,26 +215,36 @@ export function Invite({ wedding, guestName, note }) {
             </section>
 
             {/* Photo gallery */}
-            <section className="py-20 sm:py-28 px-6">
-                <div className="max-w-5xl mx-auto">
+            <section className="py-20 sm:py-28 px-6 relative">
+                <Sunburst className="absolute -left-10 top-10 w-56 opacity-15 hidden sm:block" />
+                <Sunburst className="absolute -right-10 bottom-10 w-56 opacity-15 hidden sm:block" />
+                <div className="max-w-6xl mx-auto relative">
                     <Reveal>
                         <div className="text-center">
                             <p className="font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-maroon">Moments</p>
                             <h2 className="mt-3 font-serif text-4xl sm:text-5xl text-ink">Fragments of us</h2>
+                            <Flourish className="mx-auto mt-6 w-32" />
                         </div>
                     </Reveal>
-                    <div className="mt-14 grid grid-cols-12 gap-4">
-                        <Reveal className="col-span-12 md:col-span-7">
-                            <img src={galleryImgs[0]} alt="Couple" className="w-full h-[440px] object-cover" style={{ filter: "sepia(0.1) saturate(0.95)" }} />
+                    <div className="mt-14 grid grid-cols-12 gap-3 sm:gap-4">
+                        {/* Big editorial portrait */}
+                        <Reveal className="col-span-12 md:col-span-7 md:row-span-2">
+                            <figure className="relative h-72 sm:h-[520px] overflow-hidden">
+                                <img src={galleryImgs[0]} alt="Divya & Anmol" loading="lazy" className="w-full h-full object-cover" />
+                                <figcaption className="absolute bottom-4 left-4 font-serif italic text-bone text-sm drop-shadow">— under the dome</figcaption>
+                            </figure>
                         </Reveal>
                         <Reveal className="col-span-6 md:col-span-5" delay={60}>
-                            <img src={galleryImgs[1]} alt="Decor" className="w-full h-[210px] object-cover" />
+                            <img src={galleryImgs[1]} alt="Cliffside sunset" loading="lazy" className="w-full h-44 sm:h-[252px] object-cover" />
                         </Reveal>
                         <Reveal className="col-span-6 md:col-span-5" delay={120}>
-                            <img src={galleryImgs[2]} alt="Tablescape" className="w-full h-[210px] object-cover" />
+                            <img src={galleryImgs[2]} alt="Bay Area cycle ride" loading="lazy" className="w-full h-44 sm:h-[252px] object-cover" />
                         </Reveal>
-                        <Reveal className="col-span-12 md:col-span-7" delay={120}>
-                            <img src={galleryImgs[3]} alt="Ceremony" className="w-full h-[260px] object-cover" />
+                        <Reveal className="col-span-7 md:col-span-7" delay={140}>
+                            <img src={galleryImgs[3]} alt="Reflection pool" loading="lazy" className="w-full h-48 sm:h-[280px] object-cover" />
+                        </Reveal>
+                        <Reveal className="col-span-5 md:col-span-5" delay={180}>
+                            <img src={galleryImgs[4]} alt="A holiday together" loading="lazy" className="w-full h-48 sm:h-[280px] object-cover" />
                         </Reveal>
                     </div>
                 </div>

@@ -5,7 +5,7 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { listGuestbook, createGuestbookEntry, fileUrl } from "../lib/api";
-import { LeafBadge } from "./Botanicals";
+import { MarigoldBadge } from "./Botanicals";
 
 function timeAgo(iso) {
     const t = new Date(iso).getTime();
@@ -137,7 +137,7 @@ export function Guestbook() {
                             className="bg-bone border border-sage/20 p-6 relative"
                             data-testid={`guestbook-entry-${i}`}
                         >
-                            <LeafBadge className="absolute -top-3 -right-3 w-9 h-9 bg-bone p-1" />
+                            <MarigoldBadge className="absolute -top-3 -right-3 w-9 h-9 bg-bone p-1 rounded-full" />
                             {e.photo_path && (
                                 <img
                                     src={fileUrl(e.photo_path)}
