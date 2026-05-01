@@ -73,14 +73,6 @@
       "last 1 safari version"
     ]
   },
-  "overrides": {
-    "ajv": "^8.0.0",
-    "fork-ts-checker-webpack-plugin": {
-      "ajv": "^6.0.0",
-      "ajv-keywords": "^3.0.0",
-      "schema-utils": "^3.0.0"
-    }
-  },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^7.1.0",
