@@ -1,7 +1,7 @@
 import { Countdown } from "./Countdown";
 import { Reveal } from "./Reveal";
 import { Guestbook } from "./Guestbook";
-import { Flourish, MarigoldGarland, MarigoldBadge, Butterfly, HeartDoodle, Paisley, Sunburst } from "./Botanicals";
+import { Flourish, MarigoldGarland, MarigoldBadge, EventHeader, Butterfly, HeartDoodle, Paisley, Sunburst } from "./Botanicals";
 import { MapPin, Music, Sparkles, Youtube, Clock } from "lucide-react";
 
 const galleryImgs = [
@@ -27,11 +27,11 @@ const weddingItinerary = [
     { time: "2:00 PM", label: "Vidaai" },
 ];
 
-function EventCard({ tag, title, dateLabel, pst, ist, location, comingSoonStream }) {
+function EventCard({ numeral, tag, title, dateLabel, pst, ist, location, comingSoonStream }) {
     return (
         <div className="frame p-8 sm:p-10 text-center relative">
-            <MarigoldBadge className="mx-auto w-14 h-14" />
-            <p className="mt-4 font-sans uppercase tracking-[0.3em] text-[11px] text-maroon">{tag}</p>
+            <EventHeader numeral={numeral} />
+            <p className="mt-5 font-sans uppercase tracking-[0.3em] text-[11px] text-maroon">{tag}</p>
             <h3 className="mt-3 font-serif text-3xl sm:text-4xl text-ink">{title}</h3>
             <p className="mt-4 font-sans text-stone-700">{dateLabel}</p>
 
@@ -146,6 +146,7 @@ export function Invite({ wedding, guestName, note }) {
                     <div className="mt-16 grid md:grid-cols-2 gap-10">
                         <Reveal>
                             <EventCard
+                                numeral="I"
                                 tag="Day 1 · Sangeet"
                                 title="A Night of Music"
                                 dateLabel="Saturday, June 27, 2026"
@@ -157,6 +158,7 @@ export function Invite({ wedding, guestName, note }) {
                         </Reveal>
                         <Reveal delay={120}>
                             <EventCard
+                                numeral="II"
                                 tag="Day 2 · Wedding"
                                 title="The Wedding"
                                 dateLabel={weddingDateStr}
@@ -227,24 +229,66 @@ export function Invite({ wedding, guestName, note }) {
                         </div>
                     </Reveal>
                     <div className="mt-14 grid grid-cols-12 gap-3 sm:gap-4">
-                        {/* Big editorial portrait */}
+                        {/* Big editorial portrait — Palace of Fine Arts */}
                         <Reveal className="col-span-12 md:col-span-7 md:row-span-2">
-                            <figure className="relative h-72 sm:h-[520px] overflow-hidden">
-                                <img src={galleryImgs[0]} alt="Divya & Anmol" loading="lazy" className="w-full h-full object-cover" />
+                            <figure className="relative aspect-[4/5] md:aspect-auto md:h-[560px] overflow-hidden">
+                                <img
+                                    src={galleryImgs[0]}
+                                    alt="Divya & Anmol"
+                                    loading="lazy"
+                                    className="w-full h-full object-cover"
+                                    style={{ objectPosition: "center 35%" }}
+                                />
                                 <figcaption className="absolute bottom-4 left-4 font-serif italic text-bone text-sm drop-shadow">— under the dome</figcaption>
                             </figure>
                         </Reveal>
+                        {/* Cliffside sunset — couple at bottom-center */}
                         <Reveal className="col-span-6 md:col-span-5" delay={60}>
-                            <img src={galleryImgs[1]} alt="Cliffside sunset" loading="lazy" className="w-full h-44 sm:h-[252px] object-cover" />
+                            <div className="aspect-square md:aspect-[5/4] overflow-hidden">
+                                <img
+                                    src={galleryImgs[1]}
+                                    alt="Cliffside sunset"
+                                    loading="lazy"
+                                    className="w-full h-full object-cover"
+                                    style={{ objectPosition: "center 70%" }}
+                                />
+                            </div>
                         </Reveal>
+                        {/* Bay Area cycle ride */}
                         <Reveal className="col-span-6 md:col-span-5" delay={120}>
-                            <img src={galleryImgs[2]} alt="Bay Area cycle ride" loading="lazy" className="w-full h-44 sm:h-[252px] object-cover" />
+                            <div className="aspect-square md:aspect-[5/4] overflow-hidden">
+                                <img
+                                    src={galleryImgs[2]}
+                                    alt="Bay Area cycle ride"
+                                    loading="lazy"
+                                    className="w-full h-full object-cover"
+                                    style={{ objectPosition: "center 55%" }}
+                                />
+                            </div>
                         </Reveal>
+                        {/* Reflection pool — couple in the lower half */}
                         <Reveal className="col-span-7 md:col-span-7" delay={140}>
-                            <img src={galleryImgs[3]} alt="Reflection pool" loading="lazy" className="w-full h-48 sm:h-[280px] object-cover" />
+                            <div className="aspect-[4/3] md:aspect-[3/2] overflow-hidden">
+                                <img
+                                    src={galleryImgs[3]}
+                                    alt="Reflection pool"
+                                    loading="lazy"
+                                    className="w-full h-full object-cover"
+                                    style={{ objectPosition: "center 78%" }}
+                                />
+                            </div>
                         </Reveal>
+                        {/* Tropical Disney */}
                         <Reveal className="col-span-5 md:col-span-5" delay={180}>
-                            <img src={galleryImgs[4]} alt="A holiday together" loading="lazy" className="w-full h-48 sm:h-[280px] object-cover" />
+                            <div className="aspect-[4/3] md:aspect-[3/2] overflow-hidden">
+                                <img
+                                    src={galleryImgs[4]}
+                                    alt="A holiday together"
+                                    loading="lazy"
+                                    className="w-full h-full object-cover"
+                                    style={{ objectPosition: "center 50%" }}
+                                />
+                            </div>
                         </Reveal>
                     </div>
                 </div>

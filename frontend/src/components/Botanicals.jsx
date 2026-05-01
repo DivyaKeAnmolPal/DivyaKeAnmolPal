@@ -33,27 +33,41 @@ export function MarigoldGarland({ className = "" }) {
     );
 }
 
-// Single marigold bloom badge — replaces LeafBadge.
+// Elegant ornamental rosette (thin line-art medallion) — replaces the blobby marigold badge.
 export function MarigoldBadge({ className = "" }) {
     return (
         <svg viewBox="0 0 60 60" className={className} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <g transform="translate(30,30)">
+            <g transform="translate(30,30)" stroke="#8B1C2D" strokeWidth="0.7" fill="none" strokeLinecap="round">
+                <circle r="22" strokeOpacity="0.35" />
+                <circle r="16" strokeDasharray="1 3" strokeOpacity="0.55" />
                 {Array.from({ length: 12 }).map((_, k) => {
-                    const a = (k / 12) * Math.PI * 2;
-                    const cx = Math.cos(a) * 14;
-                    const cy = Math.sin(a) * 14;
-                    return <circle key={k} cx={cx} cy={cy} r="9" fill="#E58741" fillOpacity="0.85" />;
+                    const a = (k / 12) * 360;
+                    return (
+                        <g key={k} transform={`rotate(${a})`}>
+                            <path d="M0 -20 C 3 -14, 3 -10, 0 -7 C -3 -10, -3 -14, 0 -20 Z" fill="#C75A2C" fillOpacity="0.18" />
+                        </g>
+                    );
                 })}
-                {Array.from({ length: 8 }).map((_, k) => {
-                    const a = (k / 8) * Math.PI * 2 + 0.2;
-                    const cx = Math.cos(a) * 8;
-                    const cy = Math.sin(a) * 8;
-                    return <circle key={k} cx={cx} cy={cy} r="6" fill="#C75A2C" />;
-                })}
-                <circle r="6" fill="#A03B1C" />
-                <circle r="2.5" fill="#6E1A0A" />
+                <circle r="4" fill="#8B1C2D" stroke="none" />
+                <circle r="1.6" fill="#FBF7F0" stroke="none" />
             </g>
         </svg>
+    );
+}
+
+// Refined event header — Roman numeral above an art-deco diamond divider.
+export function EventHeader({ numeral = "I" }) {
+    return (
+        <div className="flex flex-col items-center gap-3">
+            <span className="font-serif italic text-3xl sm:text-4xl text-maroon leading-none tracking-wider">{numeral}</span>
+            <div className="flex items-center gap-3">
+                <span className="block w-14 h-px bg-maroon/45" />
+                <span className="block w-1.5 h-1.5 rotate-45 border border-maroon" />
+                <span className="block w-1 h-1 rotate-45 bg-maroon/70" />
+                <span className="block w-1.5 h-1.5 rotate-45 border border-maroon" />
+                <span className="block w-14 h-px bg-maroon/45" />
+            </div>
+        </div>
     );
 }
 
