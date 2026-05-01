@@ -1,12 +1,14 @@
 import { useState } from "react";
 
-export function Envelope({ guestName = "Our Dearest Friend", onOpened }) {
+export function Envelope({ guestName = "Friend", note, onOpened }) {
     const [open, setOpen] = useState(false);
     const [hide, setHide] = useState(false);
 
     const handleOpen = () => {
         if (open) return;
         setOpen(true);
+        // brief haptic on mobile if allowed
+        try { navigator.vibrate && navigator.vibrate(20); } catch { /* noop */ }
         window.setTimeout(() => {
             setHide(true);
             onOpened && onOpened();
@@ -25,26 +27,34 @@ export function Envelope({ guestName = "Our Dearest Friend", onOpened }) {
                     <img
                         src="/brand/logo.jpeg"
                         alt="Divya & Anmol"
-                        className="logo-blend w-12 h-12 sm:w-16 sm:h-16 object-contain mb-1"
+                        className="logo-blend w-12 h-12 sm:w-14 sm:h-14 object-contain mb-1"
                     />
-                    <div className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-stone-500 font-sans">
+                    <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-stone-500 font-sans">
                         You are invited
                     </div>
-                    <div className="font-serif italic text-base sm:text-xl text-stone-700 leading-tight mt-1">
+                    <div className="font-serif italic text-base sm:text-lg text-stone-700 leading-tight mt-1">
                         Dearest
                     </div>
                     <div
-                        className="font-serif text-xl sm:text-3xl text-maroon leading-tight mt-0.5 px-4"
+                        className="font-serif text-xl sm:text-2xl text-maroon leading-tight mt-0.5 px-3"
                         data-testid="letter-guest-name"
                     >
                         {guestName}
                     </div>
-                    <div className="divider w-28 sm:w-36 my-2 text-stone-400">
-                        <span className="font-serif italic text-xs">&amp;</span>
-                    </div>
-                    <div className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-stone-500 font-sans">
-                        with love
-                    </div>
+                    {note ? (
+                        <div className="mt-2 px-2 sm:px-3 font-serif italic text-stone-700 text-[10px] sm:text-xs leading-snug line-clamp-3" data-testid="letter-note">
+                            "{note}"
+                        </div>
+                    ) : (
+                        <>
+                            <div className="divider w-24 sm:w-32 my-2 text-stone-400">
+                                <span className="font-serif italic text-xs">&amp;</span>
+                            </div>
+                            <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-stone-500 font-sans">
+                                with love
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <div className="envelope-front">
@@ -80,10 +90,10 @@ export function Envelope({ guestName = "Our Dearest Friend", onOpened }) {
 
             <div className="mt-10 text-center">
                 <p className="text-xs uppercase tracking-[0.3em] text-stone-500 font-sans">
-                    Break the seal
+                    Tap the seal
                 </p>
                 <p className="mt-2 font-serif italic text-stone-600">
-                    Tap the wax to open your invitation
+                    to break it open
                 </p>
             </div>
         </div>

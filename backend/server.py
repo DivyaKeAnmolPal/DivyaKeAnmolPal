@@ -116,10 +116,10 @@ class WeddingInfo(BaseModel):
     bride_name: str = "Divya"
     groom_name: str = "Anmol"
     wedding_date: str = "2026-06-28T08:00:00"
-    ceremony_venue: str = "Venue details coming soon"
-    reception_venue: str = "Venue details coming soon"
+    ceremony_venue: str = "BAPS Swaminarayan Mandir, Milpitas, California"
+    reception_venue: str = "Shubham Hall, Sunnyvale, California"
     hashtag: str = "#DivyakeAnmolpal"
-    location_city: str = "San Jose, California"
+    location_city: str = "San Jose Bay Area, California"
 
 
 class GuestbookEntry(BaseModel):

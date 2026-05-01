@@ -24,7 +24,6 @@ export default function InvitePage() {
                         if (!mounted) return;
                         setGuest(g);
                     } catch (e) {
-                        // Unknown slug - fall back to a displayed name from the slug
                         const fallback = decodeURIComponent(guestSlug)
                             .replace(/-/g, " ")
                             .replace(/\b\w/g, (c) => c.toUpperCase());
@@ -39,9 +38,7 @@ export default function InvitePage() {
     }, [guestSlug]);
 
     useEffect(() => {
-        if (opened) {
-            window.scrollTo({ top: 0, behavior: "instant" });
-        }
+        if (opened) window.scrollTo({ top: 0, behavior: "instant" });
     }, [opened]);
 
     if (loading || !wedding) {
@@ -52,23 +49,31 @@ export default function InvitePage() {
         );
     }
 
-    const guestName = guest?.name || "Our Dearest Friend";
+    const guestName = guest?.name || "Friend";
+    const note = guest?.message || null;
 
     if (!opened) {
         return (
             <div className="min-h-screen paper-bg flex flex-col items-center justify-center px-6 py-20">
                 <div className="text-center mb-12 animate-fade-in">
-                    <p className="font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-stone-500">
-                        {wedding.bride_name} &amp; {wedding.groom_name}
+                    <p className="font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-maroon">
+                        {wedding.hashtag}
                     </p>
                     <h1 className="mt-4 font-serif italic text-3xl sm:text-5xl text-ink">
-                        An invitation awaits you
+                        Sealed with love
                     </h1>
+                    <p className="mt-3 font-serif text-stone-600 text-sm sm:text-base">
+                        Something is waiting for you inside.
+                    </p>
                 </div>
-                <Envelope guestName={guestName} onOpened={() => setOpened(true)} />
+                <Envelope
+                    guestName={guestName}
+                    note={note}
+                    onOpened={() => setOpened(true)}
+                />
             </div>
         );
     }
 
-    return <Invite wedding={wedding} guestName={guestName} />;
+    return <Invite wedding={wedding} guestName={guestName} note={note} />;
 }

@@ -54,7 +54,7 @@ function EventCard({ tag, title, dateLabel, pst, ist, location, comingSoonStream
     );
 }
 
-export function Invite({ wedding, guestName }) {
+export function Invite({ wedding, guestName, note }) {
     const wedDate = new Date(wedding.wedding_date); // Jun 28, 2026 8:00 AM PST
     const sangeetDateStr = "Saturday, June 27, 2026";
     const weddingDateStr = "Sunday, June 28, 2026";
@@ -100,6 +100,17 @@ export function Invite({ wedding, guestName }) {
                     <p className="mt-3 font-sans uppercase tracking-[0.3em] text-xs text-stone-500">
                         27 — 28 June 2026 · {wedding.location_city || "San Jose, California"}
                     </p>
+
+                    {note ? (
+                        <div className="mt-10 max-w-md mx-auto frame px-6 py-5 text-left" data-testid="invite-personal-note">
+                            <p className="font-sans uppercase tracking-[0.3em] text-[10px] text-maroon">
+                                A note for {guestName}
+                            </p>
+                            <p className="mt-2 font-serif italic text-stone-700 text-base sm:text-lg leading-relaxed">
+                                "{note}"
+                            </p>
+                        </div>
+                    ) : null}
                 </div>
             </section>
 
@@ -137,7 +148,7 @@ export function Invite({ wedding, guestName }) {
                                 dateLabel="Saturday, June 27, 2026"
                                 pst="5:00 PM PST"
                                 ist="5:30 AM IST · 28 June"
-                                location="Venue · coming soon"
+                                location={wedding.reception_venue || "Shubham Hall, Sunnyvale"}
                                 comingSoonStream="Live stream link · coming soon"
                             />
                         </Reveal>
@@ -148,7 +159,7 @@ export function Invite({ wedding, guestName }) {
                                 dateLabel={weddingDateStr}
                                 pst="8:00 AM PST"
                                 ist="8:30 PM IST · 28 June"
-                                location="Venue · coming soon"
+                                location={wedding.ceremony_venue || "BAPS Mandir, Milpitas"}
                                 comingSoonStream="Live stream link · coming soon"
                             />
                         </Reveal>
