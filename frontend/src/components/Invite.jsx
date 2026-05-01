@@ -1,69 +1,116 @@
 import { Countdown } from "./Countdown";
 import { Reveal } from "./Reveal";
-import { MapPin, Calendar, Heart } from "lucide-react";
+import { Guestbook } from "./Guestbook";
+import { Flourish, BotanicalStem, LeafBadge, Butterfly, HeartDoodle } from "./Botanicals";
+import { MapPin, Music, Sparkles, Youtube, Clock } from "lucide-react";
 
-const heroImg = "https://images.pexels.com/photos/20180399/pexels-photo-20180399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
-const venue1 = "https://images.unsplash.com/photo-1763553113391-a659bee36e06?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwd2VkZGluZyUyMHZlbnVlJTIwdGFibGV8ZW58MHx8fHwxNzc2ODk5NjMwfDA&ixlib=rb-4.1.0&q=85";
-const venue2 = "https://images.pexels.com/photos/16120230/pexels-photo-16120230.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
-const couple = "https://images.unsplash.com/photo-1707193392435-c789b2845ea8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxlZGl0b3JpYWwlMjB3ZWRkaW5nJTIwY291cGxlJTIwZmlsbXxlbnwwfHx8fDE3NzY4OTk2MjZ8MA&ixlib=rb-4.1.0&q=85";
-
-const story = [
-    { year: "2019", title: "The first hello", body: "A quiet coffee shop in San Jose, a borrowed pen, and a conversation that somehow outlasted three refills." },
-    { year: "2022", title: "The long road", body: "Two cities, one shared playlist. Late-night calls, weekend flights, and a promise to always come back home to each other." },
-    { year: "2025", title: "The proposal", body: "On a golden California evening, beneath a sky blushing with sunset, he asked — and she said yes." },
-    { year: "2026", title: "Forever", body: "And now, dearest friend, we ask you to witness the next chapter." },
+const galleryImgs = [
+    "https://images.unsplash.com/photo-1707193392435-c789b2845ea8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxlZGl0b3JpYWwlMjB3ZWRkaW5nJTIwY291cGxlJTIwZmlsbXxlbnwwfHx8fDE3NzY4OTk2MjZ8MA&ixlib=rb-4.1.0&q=85",
+    "https://images.pexels.com/photos/16120230/pexels-photo-16120230.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    "https://images.unsplash.com/photo-1763553113391-a659bee36e06?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwd2VkZGluZyUyMHZlbnVlJTIwdGFibGV8ZW58MHx8fHwxNzc2ODk5NjMwfDA&ixlib=rb-4.1.0&q=85",
+    "https://images.pexels.com/photos/20180399/pexels-photo-20180399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
 ];
 
+const sangeetItinerary = [
+    { time: "5:00 PM", label: "Welcome & sundowners" },
+    { time: "6:30 PM", label: "Performances — friends, family & us" },
+    { time: "8:00 PM", label: "Dinner under the lights" },
+    { time: "9:30 PM", label: "Dance floor opens" },
+];
+
+const weddingItinerary = [
+    { time: "8:00 AM", label: "Arrival & welcome chai" },
+    { time: "8:45 AM", label: "Baraat" },
+    { time: "9:30 AM", label: "Ceremony" },
+    { time: "12:00 PM", label: "Lunch" },
+    { time: "2:00 PM", label: "Vidaai" },
+];
+
+function EventCard({ tag, title, dateLabel, pst, ist, location, comingSoonStream }) {
+    return (
+        <div className="frame p-8 sm:p-10 text-center relative">
+            <LeafBadge className="mx-auto w-14 h-14" />
+            <p className="mt-4 font-sans uppercase tracking-[0.3em] text-[11px] text-maroon">{tag}</p>
+            <h3 className="mt-3 font-serif text-3xl sm:text-4xl text-ink">{title}</h3>
+            <p className="mt-4 font-sans text-stone-700">{dateLabel}</p>
+
+            <div className="mt-5 inline-flex flex-col gap-1 text-sm">
+                <span className="font-serif italic text-stone-700">
+                    <Clock className="inline w-3.5 h-3.5 mr-1.5 -mt-0.5 text-sage" />
+                    {pst} <span className="text-stone-400 mx-1">·</span> {ist}
+                </span>
+            </div>
+
+            <div className="mt-5 inline-flex items-center gap-2 text-sage">
+                <MapPin className="w-4 h-4" />
+                <span className="font-sans text-sm">{location}</span>
+            </div>
+
+            <div className="mt-4 inline-flex items-center gap-2 text-stone-500">
+                <Youtube className="w-4 h-4 text-maroon" />
+                <span className="font-sans text-xs uppercase tracking-[0.25em]">{comingSoonStream}</span>
+            </div>
+        </div>
+    );
+}
+
 export function Invite({ wedding, guestName }) {
-    const weddingDate = new Date(wedding.wedding_date);
-    const dateLong = weddingDate.toLocaleDateString("en-US", {
-        weekday: "long", month: "long", day: "numeric", year: "numeric",
-    });
-    const timeStr = weddingDate.toLocaleTimeString("en-US", {
-        hour: "numeric", minute: "2-digit",
-    });
+    const wedDate = new Date(wedding.wedding_date); // Jun 28, 2026 8:00 AM PST
+    const sangeetDateStr = "Saturday, June 27, 2026";
+    const weddingDateStr = "Sunday, June 28, 2026";
 
     return (
-        <div className="paper-bg min-h-screen" data-testid="invite-page">
-            {/* Hero */}
-            <section className="relative h-[92vh] min-h-[620px] flex items-center justify-center overflow-hidden">
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        backgroundImage: `url(${heroImg})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        filter: "saturate(0.85) brightness(0.72)",
-                    }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-[#FAF9F6]" />
-                <div className="relative z-10 text-center px-6 animate-fade-up">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.4em] text-white/85 font-sans">
-                        Together with their families
-                    </p>
-                    <h1 className="mt-6 font-serif text-5xl sm:text-7xl md:text-8xl text-white leading-none">
-                        {wedding.bride_name}
-                        <span className="block font-serif italic text-3xl sm:text-5xl text-white/90 my-3 sm:my-5">and</span>
-                        {wedding.groom_name}
-                    </h1>
-                    <div className="divider max-w-xs mx-auto mt-10 text-white/70">
-                        <Heart className="w-4 h-4" />
+        <div className="paper-bg min-h-screen relative overflow-hidden" data-testid="invite-page">
+            <BotanicalStem className="botanical-side-left animate-sway" />
+            <BotanicalStem className="botanical-side-right animate-sway" />
+
+            {/* Hero with logo centerpiece */}
+            <section className="relative pt-16 sm:pt-24 pb-16 sm:pb-24 px-6">
+                <div className="max-w-4xl mx-auto text-center relative">
+                    {/* Floating butterflies */}
+                    <Butterfly className="absolute left-[10%] top-2 w-10 sm:w-14 animate-flutter opacity-80" />
+                    <Butterfly className="absolute right-[12%] top-16 w-7 sm:w-10 animate-flutter opacity-70" style={{ animationDelay: "1.5s" }} />
+                    <HeartDoodle className="absolute left-[18%] top-[55%] w-8 opacity-70 hidden sm:block" />
+
+                    <div className="watercolor-halo">
+                        <img
+                            src="/brand/logo.jpeg"
+                            alt="Divya & Anmol logo"
+                            className="logo-blend mx-auto w-44 sm:w-64 h-auto select-none"
+                            data-testid="hero-logo"
+                        />
                     </div>
-                    <p className="mt-6 text-white font-serif italic text-lg sm:text-xl">
-                        invite {guestName ? <span className="underline decoration-white/60 underline-offset-4">{guestName}</span> : "you"} to celebrate their wedding
+
+                    <p className="mt-2 font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-maroon">
+                        {wedding.hashtag}
                     </p>
-                    <p className="mt-8 text-white/90 font-sans uppercase tracking-[0.3em] text-xs sm:text-sm">
-                        {dateLong.toUpperCase()}
+
+                    <p className="mt-8 font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-sage">
+                        We are getting married
+                    </p>
+                    <h1 className="mt-4 font-serif text-5xl sm:text-7xl md:text-8xl text-maroon leading-[0.95]">
+                        Divya
+                        <span className="block font-serif italic text-2xl sm:text-4xl text-stone-600 my-2">&amp;</span>
+                        Anmol
+                    </h1>
+                    <Flourish className="mx-auto mt-6 w-44" />
+                    <p className="mt-6 font-serif italic text-stone-700 text-lg sm:text-xl">
+                        request the pleasure of {guestName ? <span className="text-maroon">{guestName}'s</span> : "your"} company
+                    </p>
+                    <p className="mt-3 font-sans uppercase tracking-[0.3em] text-xs text-stone-500">
+                        27 — 28 June 2026 · {wedding.location_city || "San Jose, California"}
                     </p>
                 </div>
             </section>
 
             {/* Countdown */}
-            <section className="py-20 sm:py-28 px-6">
+            <section className="py-16 sm:py-24 px-6 blush-bg">
                 <Reveal>
-                    <div className="max-w-5xl mx-auto text-center">
-                        <p className="font-sans uppercase tracking-[0.3em] text-xs text-stone-500">The wait begins</p>
-                        <h2 className="mt-3 font-serif text-4xl sm:text-5xl">Counting the days</h2>
+                    <div className="max-w-4xl mx-auto text-center">
+                        <p className="font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-maroon">Countdown</p>
+                        <h2 className="mt-2 font-serif text-3xl sm:text-4xl text-ink">
+                            Until {weddingDateStr}
+                        </h2>
                         <div className="mt-10">
                             <Countdown targetIso={wedding.wedding_date} />
                         </div>
@@ -71,123 +118,139 @@ export function Invite({ wedding, guestName }) {
                 </Reveal>
             </section>
 
-            {/* Our story */}
-            <section className="py-20 sm:py-28 px-6 bg-[#F5F5F0]">
+            {/* The Celebrations */}
+            <section className="py-20 sm:py-28 px-6">
+                <div className="max-w-5xl mx-auto">
+                    <Reveal>
+                        <div className="text-center">
+                            <p className="font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-maroon">The Celebrations</p>
+                            <h2 className="mt-3 font-serif text-4xl sm:text-5xl text-ink">Two days of joy</h2>
+                            <Flourish className="mx-auto mt-6 w-32" />
+                        </div>
+                    </Reveal>
+
+                    <div className="mt-16 grid md:grid-cols-2 gap-10">
+                        <Reveal>
+                            <EventCard
+                                tag="Day 1 · Sangeet"
+                                title="A Night of Music"
+                                dateLabel="Saturday, June 27, 2026"
+                                pst="5:00 PM PST"
+                                ist="5:30 AM IST · 28 June"
+                                location="Venue · coming soon"
+                                comingSoonStream="Live stream link · coming soon"
+                            />
+                        </Reveal>
+                        <Reveal delay={120}>
+                            <EventCard
+                                tag="Day 2 · Wedding"
+                                title="The Wedding"
+                                dateLabel={weddingDateStr}
+                                pst="8:00 AM PST"
+                                ist="8:30 PM IST · 28 June"
+                                location="Venue · coming soon"
+                                comingSoonStream="Live stream link · coming soon"
+                            />
+                        </Reveal>
+                    </div>
+                </div>
+            </section>
+
+            {/* Itinerary */}
+            <section className="py-20 sm:py-28 px-6 linen-bg">
                 <div className="max-w-4xl mx-auto">
                     <Reveal>
                         <div className="text-center">
-                            <p className="font-sans uppercase tracking-[0.3em] text-xs text-stone-500">Chapters</p>
-                            <h2 className="mt-3 font-serif text-4xl sm:text-5xl">Our little story</h2>
+                            <p className="font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-maroon">Itinerary</p>
+                            <h2 className="mt-3 font-serif text-4xl sm:text-5xl text-ink">27 — 28 June 2026</h2>
+                            <Flourish className="mx-auto mt-6 w-32" />
                         </div>
                     </Reveal>
-                    <div className="mt-16 relative">
-                        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-stone-300 hidden md:block" />
-                        <div className="space-y-12 md:space-y-20">
-                            {story.map((s, i) => (
-                                <Reveal key={s.year} delay={i * 60}>
-                                    <div className={`md:grid md:grid-cols-2 md:gap-14 items-center ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
-                                        <div className={`${i % 2 ? "md:text-left" : "md:text-right"}`}>
-                                            <div className="font-sans uppercase text-xs tracking-[0.3em] text-burgundy">{s.year}</div>
-                                            <h3 className="mt-2 font-serif text-3xl text-ink">{s.title}</h3>
-                                        </div>
-                                        <div className="mt-4 md:mt-0">
-                                            <p className="font-sans text-stone-600 leading-relaxed">{s.body}</p>
-                                        </div>
-                                    </div>
-                                </Reveal>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-            {/* Schedule */}
-            <section className="py-20 sm:py-28 px-6">
-                <div className="max-w-5xl mx-auto">
-                    <Reveal>
-                        <div className="text-center">
-                            <p className="font-sans uppercase tracking-[0.3em] text-xs text-stone-500">The day</p>
-                            <h2 className="mt-3 font-serif text-4xl sm:text-5xl">Order of events</h2>
-                        </div>
-                    </Reveal>
-                    <div className="mt-14 grid md:grid-cols-2 gap-8">
+                    <div className="mt-14 grid md:grid-cols-2 gap-12">
                         <Reveal>
-                            <div className="bg-white border border-stone-200 p-10">
-                                <Calendar className="w-5 h-5 text-burgundy" />
-                                <div className="mt-4 font-sans uppercase tracking-[0.3em] text-xs text-stone-500">Ceremony</div>
-                                <h3 className="mt-2 font-serif text-3xl">{timeStr}</h3>
-                                <p className="mt-3 font-sans text-stone-600">{wedding.ceremony_venue}</p>
-                                <p className="mt-6 font-serif italic text-stone-500">Vows beneath a canopy of California blooms.</p>
-                            </div>
+                            <h3 className="font-serif text-2xl text-maroon flex items-center gap-2">
+                                <Music className="w-5 h-5" /> Sangeet
+                            </h3>
+                            <p className="mt-1 font-sans text-xs uppercase tracking-[0.2em] text-stone-500">{sangeetDateStr} · 5:00 PM PST</p>
+                            <ul className="mt-6 space-y-5">
+                                {sangeetItinerary.map((s) => (
+                                    <li key={s.time} className="flex gap-5 items-baseline">
+                                        <span className="font-serif italic text-maroon text-lg w-24 shrink-0 tabular-nums">{s.time}</span>
+                                        <span className="font-sans text-stone-700">{s.label}</span>
+                                    </li>
+                                ))}
+                            </ul>
                         </Reveal>
-                        <Reveal delay={80}>
-                            <div className="bg-white border border-stone-200 p-10">
-                                <Calendar className="w-5 h-5 text-olive" />
-                                <div className="mt-4 font-sans uppercase tracking-[0.3em] text-xs text-stone-500">Reception</div>
-                                <h3 className="mt-2 font-serif text-3xl">Dinner &amp; dancing, 8:00 PM</h3>
-                                <p className="mt-3 font-sans text-stone-600">{wedding.reception_venue}</p>
-                                <p className="mt-6 font-serif italic text-stone-500">Bring your dancing shoes and an appetite.</p>
-                            </div>
-                        </Reveal>
-                    </div>
-                </div>
-            </section>
-
-            {/* Venue */}
-            <section className="py-20 sm:py-28 px-6 bg-[#F5F5F0]">
-                <div className="max-w-5xl mx-auto">
-                    <div className="md:grid md:grid-cols-12 md:gap-10 items-center">
-                        <Reveal className="md:col-span-5">
-                            <p className="font-sans uppercase tracking-[0.3em] text-xs text-stone-500">Where</p>
-                            <h2 className="mt-3 font-serif text-4xl sm:text-5xl">{wedding.ceremony_venue.split(",")[0]}</h2>
-                            <p className="mt-4 font-sans text-stone-600 leading-relaxed">
-                                A sun-drenched garden in the heart of San Jose, where string lights catch the California dusk and the air hums with summer. We can't imagine a more fitting place to say 'I do'.
-                            </p>
-                            <div className="mt-6 inline-flex items-center gap-2 text-burgundy">
-                                <MapPin className="w-4 h-4" />
-                                <span className="font-sans text-sm">{wedding.ceremony_venue}</span>
-                            </div>
-                        </Reveal>
-                        <Reveal className="md:col-span-7 mt-8 md:mt-0" delay={120}>
-                            <div className="aspect-[4/3] overflow-hidden">
-                                <img src={venue1} alt="Venue" className="w-full h-full object-cover" />
-                            </div>
+                        <Reveal delay={120}>
+                            <h3 className="font-serif text-2xl text-maroon flex items-center gap-2">
+                                <Sparkles className="w-5 h-5" /> Wedding
+                            </h3>
+                            <p className="mt-1 font-sans text-xs uppercase tracking-[0.2em] text-stone-500">{weddingDateStr} · 8:00 AM PST</p>
+                            <ul className="mt-6 space-y-5">
+                                {weddingItinerary.map((s) => (
+                                    <li key={s.time} className="flex gap-5 items-baseline">
+                                        <span className="font-serif italic text-maroon text-lg w-24 shrink-0 tabular-nums">{s.time}</span>
+                                        <span className="font-sans text-stone-700">{s.label}</span>
+                                    </li>
+                                ))}
+                            </ul>
                         </Reveal>
                     </div>
                 </div>
             </section>
 
-            {/* Gallery */}
+            {/* Photo gallery */}
             <section className="py-20 sm:py-28 px-6">
                 <div className="max-w-5xl mx-auto">
                     <Reveal>
                         <div className="text-center">
-                            <p className="font-sans uppercase tracking-[0.3em] text-xs text-stone-500">Moments</p>
-                            <h2 className="mt-3 font-serif text-4xl sm:text-5xl">Fragments of us</h2>
+                            <p className="font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-maroon">Moments</p>
+                            <h2 className="mt-3 font-serif text-4xl sm:text-5xl text-ink">Fragments of us</h2>
                         </div>
                     </Reveal>
                     <div className="mt-14 grid grid-cols-12 gap-4">
                         <Reveal className="col-span-12 md:col-span-7">
-                            <img src={couple} alt="Couple" className="w-full h-[440px] object-cover grayscale" />
+                            <img src={galleryImgs[0]} alt="Couple" className="w-full h-[440px] object-cover" style={{ filter: "sepia(0.1) saturate(0.95)" }} />
                         </Reveal>
                         <Reveal className="col-span-6 md:col-span-5" delay={60}>
-                            <img src={venue2} alt="Venue decor" className="w-full h-[210px] object-cover" />
+                            <img src={galleryImgs[1]} alt="Decor" className="w-full h-[210px] object-cover" />
                         </Reveal>
                         <Reveal className="col-span-6 md:col-span-5" delay={120}>
-                            <img src={venue1} alt="Reception" className="w-full h-[210px] object-cover" />
+                            <img src={galleryImgs[2]} alt="Tablescape" className="w-full h-[210px] object-cover" />
+                        </Reveal>
+                        <Reveal className="col-span-12 md:col-span-7" delay={120}>
+                            <img src={galleryImgs[3]} alt="Ceremony" className="w-full h-[260px] object-cover" />
                         </Reveal>
                     </div>
                 </div>
             </section>
 
+            {/* Live stream coming soon */}
+            <section className="py-20 sm:py-28 px-6 blush-bg">
+                <div className="max-w-3xl mx-auto text-center frame p-10">
+                    <Youtube className="mx-auto w-7 h-7 text-maroon" />
+                    <p className="mt-3 font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-maroon">Live stream</p>
+                    <h2 className="mt-3 font-serif text-3xl sm:text-4xl text-ink">Joining from afar?</h2>
+                    <p className="mt-4 font-serif italic text-stone-700">
+                        We'll share the YouTube live links here closer to the day so you can witness the vows wherever you are.
+                    </p>
+                    <p className="mt-6 font-sans uppercase tracking-[0.3em] text-xs text-maroon">Coming soon</p>
+                </div>
+            </section>
+
+            {/* Guestbook */}
+            <Guestbook />
+
             {/* Signoff */}
-            <section className="py-20 sm:py-28 px-6 text-center">
-                <p className="font-sans uppercase tracking-[0.3em] text-xs text-stone-500">{wedding.hashtag}</p>
-                <h2 className="mt-3 font-serif italic text-4xl sm:text-6xl text-burgundy">
+            <section className="py-24 sm:py-32 px-6 text-center">
+                <img src="/brand/logo.jpeg" alt="logo" className="logo-blend mx-auto w-24 h-auto opacity-90" />
+                <p className="mt-6 font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-maroon">{wedding.hashtag}</p>
+                <h2 className="mt-3 font-serif italic text-4xl sm:text-6xl text-maroon">
                     With love, {wedding.bride_name} &amp; {wedding.groom_name}
                 </h2>
-                <p className="mt-8 font-sans text-stone-500 text-sm">
-                    Please come prepared to dance until the stars fade.
+                <p className="mt-8 font-sans text-stone-500 text-sm max-w-md mx-auto">
+                    Please come prepared to dance — and to stay for the after party.
                 </p>
             </section>
         </div>

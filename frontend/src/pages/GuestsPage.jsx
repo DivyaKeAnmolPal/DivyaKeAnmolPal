@@ -76,7 +76,7 @@ export default function GuestsPage() {
                     </div>
                     <Link
                         to="/"
-                        className="hidden sm:inline-flex items-center gap-2 font-sans uppercase tracking-[0.25em] text-xs text-stone-600 hover:text-burgundy transition-colors"
+                        className="hidden sm:inline-flex items-center gap-2 font-sans uppercase tracking-[0.25em] text-xs text-stone-600 hover:text-maroon transition-colors"
                         data-testid="back-home-link"
                     >
                         Home <ArrowRight className="w-3.5 h-3.5" />
@@ -107,7 +107,7 @@ export default function GuestsPage() {
                         <Button
                             type="submit"
                             disabled={submitting || !name.trim()}
-                            className="bg-burgundy hover:bg-burgundy-dark text-bone rounded-sm uppercase tracking-[0.25em] text-xs h-11 px-6"
+                            className="bg-maroon hover:bg-maroon-dark text-bone rounded-sm uppercase tracking-[0.25em] text-xs h-11 px-6"
                             data-testid="add-guest-submit"
                         >
                             <Plus className="w-4 h-4 mr-2" /> Create invitation
@@ -143,7 +143,7 @@ export default function GuestsPage() {
                                             href={urlFor(g.slug)}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="font-sans text-xs text-stone-500 hover:text-burgundy truncate block"
+                                            className="font-sans text-xs text-stone-500 hover:text-maroon truncate block"
                                         >
                                             /invite/{g.slug}
                                         </a>
@@ -172,7 +172,7 @@ export default function GuestsPage() {
                                         <Button
                                             type="button"
                                             variant="ghost"
-                                            className="rounded-sm h-9 w-9 p-0 text-stone-500 hover:text-burgundy"
+                                            className="rounded-sm h-9 w-9 p-0 text-stone-500 hover:text-maroon"
                                             onClick={() => onDelete(g.slug)}
                                             aria-label="Delete guest"
                                             data-testid={`delete-guest-${g.slug}`}

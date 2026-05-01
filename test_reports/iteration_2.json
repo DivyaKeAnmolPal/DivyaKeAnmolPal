@@ -1,0 +1,43 @@
+{
+  "summary": "Iteration 2 (Divya & Anmol — June 28 2026, San Jose) tested. Backend pytest 15/16 (1 minor: bad file path returns 500 instead of 404). Frontend e2e flow passes end to end: Home -> /guests admin (create/list/preview/delete) -> /invite/<slug> envelope (logo on wax seal, guest name shown) -> click wax -> ~2.1s animation -> invite page with hero logo, hashtag #DivyakeAnmolpal, Divya & Anmol heading, '27 — 28 June 2026 · San Jose, California', countdown to 2026-06-28, Two days of joy event cards with PST + IST and 'Venue · coming soon' + 'Live stream link · coming soon', sangeet/wedding itineraries, photo gallery, livestream coming-soon block, guestbook. Guestbook submit with optional photo uploads to Emergent objstore via /api/guestbook (multipart) and is served back via /api/files/<path> with image content-type — verified the posted entry plus its rendered image in the list (naturalWidth>0).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "GET /api/files/{bad-path}", "issue": "Returns 500 instead of 404 for non-existent storage path. server.py serve_file maps only requests.HTTPError 404 -> 404, but the upstream storage returns a different status (likely 400/403) for missing keys, which falls through to 500. Spec asks for 404 on bad path."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Invite hero / Home", "issues": ["The #DivyakeAnmolpal hashtag is rendered uppercase (CSS uppercase) — visually fine; just note that any test must do case-insensitive comparison."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/wedding_invite_test.py",
+    "/app/test_reports/pytest/wedding_invite_results.xml"
+  ],
+  "action_items": [
+    "Fix /api/files/{path}: when upstream storage returns any non-200 status indicating missing object, return 404 instead of 500 (e.g., map 400/403/404 from objstore to 404, only return 500 on real internal failure)."
+  ],
+  "critical_code_review_comments": [
+    "server.py serve_file: only maps storage 404 -> 404; any other upstream status (403/400) becomes 500. Should treat 'object not found' broadly as 404.",
+    "init_storage / put_object / get_object are blocking requests.* calls running inside async FastAPI handlers — under load this will block the event loop. Consider httpx.AsyncClient or starlette run_in_threadpool.",
+    "POST /api/guestbook reads the entire upload before checking 8MB limit — for large files this still buffers into memory. Stream-read with size guard, or rely on FastAPI/Starlette upload size limit.",
+    "@app.on_event('startup'/'shutdown') is deprecated — migrate to FastAPI lifespan handler.",
+    "GET /api/wedding upserts on first read (write side-effect inside a GET). Consider an explicit seed step.",
+    "InvitePage falls back to a name derived from the slug for unknown guests rather than 404 — flagged in iteration 1, still present.",
+    "Guestbook UI does not validate image type client-side (accept='image/*' covers it); server validates ext list. Acceptable.",
+    "No data-testid on the home hero logo; iteration 2 task description mentions this is intentional ('not added on home logo')."
+  ],
+  "updated_files": [
+    "/app/backend/tests/wedding_invite_test.py"
+  ],
+  "success_rate": {"backend": "94% (15/16)", "frontend": "100%"},
+  "test_credentials": "N/A — no auth in this app",
+  "seed_data_creation": "TEST_/TEST prefixed guests are created and cleaned up in pytest teardown_module. Guestbook entries created during tests are NOT deleted (no DELETE endpoint exists for guestbook).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend tests at /app/backend/tests/wedding_invite_test.py cover wedding info, guests CRUD/slug, guestbook (text-only, with photo, empty name/message 400, invalid type 400, list-sorted, file-serve, bad-path 404). The bad-path test currently fails (gets 500). Frontend data-testids in use: demo-invite-link, admin-link, add-guest-input, add-guest-message, add-guest-submit, guest-row-{slug}, copy-link-button-{slug}, preview-link-{slug}, delete-guest-{slug}, back-home-link, envelope-container, letter-guest-name, guest-name-display, open-envelope-button, invite-page, hero-logo, countdown-timer, guestbook-section, guestbook-form, guestbook-name-input, guestbook-message-input, guestbook-photo-input, guestbook-submit, guestbook-entry-{i}. Envelope animation ~2.1s. Hashtag is rendered uppercase via CSS — use case-insensitive checks. Guestbook photos upload to Emergent objstore (storage_key initialised at startup) and are served via /api/files/<path>; verified images render with naturalWidth>0.",
+  "rca of the issue": "GET /api/files/{bad-path} → 500: when the requested object does not exist in Emergent objstore, the upstream returns a non-404 status (most likely 400 or 403), but server.py's exception mapping is `404 if status == 404 else 500`. Repro: curl -i $REACT_APP_BACKEND_URL/api/files/divya-anmol-wedding/guestbook/does-not-exist.png — returns 500. Fix: in serve_file's except branch, treat upstream statuses {400,403,404} (or any 4xx) as 404 and only 5xx as 500."
+}
