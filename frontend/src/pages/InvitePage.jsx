@@ -4,6 +4,16 @@ import { Envelope } from "../components/Envelope";
 import { Invite } from "../components/Invite";
 import { fetchWedding, getGuest } from "../lib/api";
 
+const DEFAULT_WEDDING = {
+    bride_name: "Divya",
+    groom_name: "Anmol",
+    wedding_date: "2026-06-28T08:00:00",
+    ceremony_venue: "BAPS Swaminarayan Mandir, Milpitas, California",
+    reception_venue: "Shubham Hall, Sunnyvale, California",
+    hashtag: "#DivyakeAnmolpal",
+    location_city: "San Jose Bay Area, California",
+};
+
 export default function InvitePage() {
     const { guestSlug } = useParams();
     const [wedding, setWedding] = useState(null);
@@ -18,21 +28,23 @@ export default function InvitePage() {
                 const w = await fetchWedding();
                 if (!mounted) return;
                 setWedding(w);
-                if (guestSlug) {
-                    try {
-                        const g = await getGuest(guestSlug);
-                        if (!mounted) return;
-                        setGuest(g);
-                    } catch (e) {
-                        const fallback = decodeURIComponent(guestSlug)
-                            .replace(/-/g, " ")
-                            .replace(/\b\w/g, (c) => c.toUpperCase());
-                        setGuest({ name: fallback, slug: guestSlug });
-                    }
-                }
-            } finally {
-                if (mounted) setLoading(false);
+            } catch {
+                if (mounted) setWedding(DEFAULT_WEDDING);
             }
+            if (guestSlug) {
+                try {
+                    const g = await getGuest(guestSlug);
+                    if (!mounted) return;
+                    setGuest(g);
+                } catch {
+                    if (!mounted) return;
+                    const fallback = decodeURIComponent(guestSlug)
+                        .replace(/-/g, " ")
+                        .replace(/\b\w/g, (c) => c.toUpperCase());
+                    setGuest({ name: fallback, slug: guestSlug });
+                }
+            }
+            if (mounted) setLoading(false);
         })();
         return () => { mounted = false; };
     }, [guestSlug]);
