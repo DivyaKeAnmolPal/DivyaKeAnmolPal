@@ -14,17 +14,16 @@ const galleryImgs = [
 
 const sangeetItinerary = [
     { time: "5:00 PM", label: "Welcome & sundowners" },
-    { time: "6:30 PM", label: "Performances — friends, family & us" },
-    { time: "8:00 PM", label: "Dinner under the lights" },
-    { time: "9:30 PM", label: "Dance floor opens" },
+    { time: "5:30 PM", label: "Performances — friends, family & us" },
+    { time: "6:00 PM", label: "Dinner under the lights" },
+    { time: "8:30 PM", label: "Dance floor opens" },
 ];
 
 const weddingItinerary = [
-    { time: "8:00 AM", label: "Arrival & welcome chai" },
-    { time: "8:45 AM", label: "Baraat" },
-    { time: "9:30 AM", label: "Ceremony" },
-    { time: "12:00 PM", label: "Lunch" },
-    { time: "2:00 PM", label: "Vidaai" },
+    { time: "7:30 AM", label: "Arrival & welcome chai" },
+    { time: "8:00 AM", label: "Baraat" },
+    { time: "8:40 AM", label: "Ceremony" },
+    { time: "12:00 PM", label: "Lunch" }
 ];
 
 function EventCard({ numeral, tag, title, dateLabel, pst, ist, location, comingSoonStream }) {
@@ -90,9 +89,11 @@ export function Invite({ wedding, guestName, note }) {
                         We are getting married
                     </p>
                     <h1 className="mt-4 font-serif text-5xl sm:text-7xl md:text-8xl text-maroon leading-[0.95]">
-                        Divya
-                        <span className="block font-serif italic text-2xl sm:text-4xl text-stone-600 my-2">&amp;</span>
                         Anmol
+                        <p className="font-sans text-xs sm:text-sm text-stone-500 tracking-wide mt-1 mb-2">S/O of Sweta &amp; Nailesh Shah</p>
+                        <span className="block font-serif italic text-2xl sm:text-4xl text-stone-600 my-2">&amp;</span>
+                        Divya
+                        <p className="font-sans text-xs sm:text-sm text-stone-500 tracking-wide mt-1">D/O Neeta &amp; Mahendra Tated</p>
                     </h1>
                     <Flourish className="mx-auto mt-6 w-44" />
                     <p className="mt-6 font-serif italic text-stone-700 text-lg sm:text-xl">
