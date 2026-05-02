@@ -25,7 +25,7 @@ export function Envelope({ guestName = "Friend", note, onOpened }) {
 
                 <div className={`letter ${open ? "is-open" : ""}`} aria-label="Invitation letter">
                     <img
-                        src="/brand/logo.jpeg"
+                        src={`${process.env.PUBLIC_URL}/brand/logo.jpeg`}
                         alt="Divya & Anmol"
                         className="logo-blend w-12 h-12 sm:w-14 sm:h-14 object-contain mb-1"
                     />
@@ -84,7 +84,7 @@ export function Envelope({ guestName = "Friend", note, onOpened }) {
                     aria-label="Open the envelope"
                     data-testid="open-envelope-button"
                 >
-                    <img src="/brand/logo.jpeg" alt="Logo" />
+                    <img src={`${process.env.PUBLIC_URL}/brand/logo.jpeg`} alt="Logo" />
                 </button>
             </div>
 

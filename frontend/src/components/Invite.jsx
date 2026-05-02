@@ -5,11 +5,11 @@ import { Flourish, MarigoldGarland, MarigoldBadge, EventHeader, Butterfly, Heart
 import { MapPin, Music, Sparkles, Youtube, Clock } from "lucide-react";
 
 const galleryImgs = [
-    "/brand/photos/p5.JPG",
-    "/brand/photos/p4.jpg",
-    "/brand/photos/p3.jpg",
-    "/brand/photos/p2.jpg",
-    "/brand/photos/p1.jpg",
+    `${process.env.PUBLIC_URL}/brand/photos/p5.JPG`,
+    `${process.env.PUBLIC_URL}/brand/photos/p4.jpg`,
+    `${process.env.PUBLIC_URL}/brand/photos/p3.jpg`,
+    `${process.env.PUBLIC_URL}/brand/photos/p2.jpg`,
+    `${process.env.PUBLIC_URL}/brand/photos/p1.jpg`,
 ];
 
 const sangeetItinerary = [
@@ -75,7 +75,7 @@ export function Invite({ wedding, guestName, note }) {
 
                     <div className="watercolor-halo">
                         <img
-                            src="/brand/logo.jpeg"
+                            src={`${process.env.PUBLIC_URL}/brand/logo.jpeg`}
                             alt="Divya & Anmol logo"
                             className="logo-blend mx-auto w-44 sm:w-64 h-auto select-none"
                             data-testid="hero-logo"
@@ -312,7 +312,7 @@ export function Invite({ wedding, guestName, note }) {
 
             {/* Signoff */}
             <section className="py-24 sm:py-32 px-6 text-center">
-                <img src="/brand/logo.jpeg" alt="logo" className="logo-blend mx-auto w-24 h-auto opacity-90" />
+                <img src={`${process.env.PUBLIC_URL}/brand/logo.jpeg`} alt="logo" className="logo-blend mx-auto w-24 h-auto opacity-90" />
                 <p className="mt-6 font-sans uppercase tracking-[0.4em] text-[10px] sm:text-xs text-maroon">{wedding.hashtag}</p>
                 <h2 className="mt-3 font-serif italic text-4xl sm:text-6xl text-maroon">
                     With love, {wedding.bride_name} &amp; {wedding.groom_name}

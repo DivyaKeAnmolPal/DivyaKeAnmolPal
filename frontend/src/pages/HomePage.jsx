@@ -12,7 +12,7 @@ export default function HomePage() {
             <div className="max-w-xl text-center animate-fade-up relative z-10">
                 <div className="watercolor-halo">
                     <img
-                        src="/brand/logo.jpeg"
+                        src={`${process.env.PUBLIC_URL}/brand/logo.jpeg`}
                         alt="Divya & Anmol"
                         className="logo-blend mx-auto w-40 sm:w-52 h-auto select-none"
                     />
