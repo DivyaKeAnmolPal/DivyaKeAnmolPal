@@ -23,4 +23,4 @@ export async function createGuestbookEntry({ name, message, photo }) {
     const { data } = await api.post("/guestbook", fd, { headers: { "Content-Type": "multipart/form-data" } });
     return data;
 }
-export const fileUrl = (path) => path ? `${API}/files/${path}` : null;
+export const fileUrl = (path) => path || null;

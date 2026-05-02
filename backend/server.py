@@ -7,6 +7,8 @@ import re
 import uuid
 import logging
 import requests
+import cloudinary
+import cloudinary.uploader
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
@@ -20,67 +22,18 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
-EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY")
-APP_NAME = "divya-anmol-wedding"
-storage_key: Optional[str] = None
+# Cloudinary config
+CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME")
+CLOUDINARY_API_KEY = os.environ.get("CLOUDINARY_API_KEY")
+CLOUDINARY_API_SECRET = os.environ.get("CLOUDINARY_API_SECRET")
 
-
-def init_storage() -> Optional[str]:
-    global storage_key
-    if storage_key:
-        return storage_key
-    if not EMERGENT_KEY:
-        return None
-    try:
-        resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_KEY}, timeout=30)
-        resp.raise_for_status()
-        storage_key = resp.json()["storage_key"]
-        return storage_key
-    except Exception as e:
-        logging.error(f"Storage init failed: {e}")
-        return None
-
-
-def put_object(path: str, data: bytes, content_type: str) -> dict:
-    key = init_storage()
-    if not key:
-        raise HTTPException(status_code=500, detail="Storage unavailable")
-    resp = requests.put(
-        f"{STORAGE_URL}/objects/{path}",
-        headers={"X-Storage-Key": key, "Content-Type": content_type},
-        data=data, timeout=120,
+if CLOUDINARY_CLOUD_NAME:
+    cloudinary.config(
+        cloud_name=CLOUDINARY_CLOUD_NAME,
+        api_key=CLOUDINARY_API_KEY,
+        api_secret=CLOUDINARY_API_SECRET,
+        secure=True,
     )
-    if resp.status_code == 403:
-        # storage_key expired -> reinit once
-        globals()['storage_key'] = None
-        key = init_storage()
-        resp = requests.put(
-            f"{STORAGE_URL}/objects/{path}",
-            headers={"X-Storage-Key": key, "Content-Type": content_type},
-            data=data, timeout=120,
-        )
-    resp.raise_for_status()
-    return resp.json()
-
-
-def get_object(path: str):
-    key = init_storage()
-    if not key:
-        raise HTTPException(status_code=500, detail="Storage unavailable")
-    resp = requests.get(
-        f"{STORAGE_URL}/objects/{path}",
-        headers={"X-Storage-Key": key}, timeout=60,
-    )
-    if resp.status_code == 403:
-        globals()['storage_key'] = None
-        key = init_storage()
-        resp = requests.get(
-            f"{STORAGE_URL}/objects/{path}",
-            headers={"X-Storage-Key": key}, timeout=60,
-        )
-    resp.raise_for_status()
-    return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
 
 
 app = FastAPI()
@@ -205,15 +158,21 @@ async def create_guestbook_entry(
 
     photo_path: Optional[str] = None
     if photo and photo.filename:
+        if not CLOUDINARY_CLOUD_NAME:
+            raise HTTPException(status_code=503, detail="Photo uploads not configured")
         ext = photo.filename.rsplit(".", 1)[-1].lower() if "." in photo.filename else "bin"
         if ext not in {"jpg", "jpeg", "png", "webp", "gif"}:
             raise HTTPException(status_code=400, detail="Unsupported image type")
-        path = f"{APP_NAME}/guestbook/{uuid.uuid4()}.{ext}"
         data = await photo.read()
         if len(data) > 8 * 1024 * 1024:
             raise HTTPException(status_code=400, detail="Image too large (8MB max)")
-        result = put_object(path, data, photo.content_type or "image/jpeg")
-        photo_path = result["path"]
+        result = cloudinary.uploader.upload(
+            data,
+            folder="divya-anmol-wedding/guestbook",
+            public_id=str(uuid.uuid4()),
+            resource_type="image",
+        )
+        photo_path = result["secure_url"]
 
     entry = GuestbookEntry(name=name.strip(), message=message.strip(), photo_path=photo_path)
     doc = entry.model_dump()
@@ -233,14 +192,9 @@ async def list_guestbook():
 
 @api_router.get("/files/{path:path}")
 async def serve_file(path: str):
-    try:
-        data, ct = get_object(path)
-        return Response(content=data, media_type=ct)
-    except requests.HTTPError:
-        raise HTTPException(status_code=404, detail="File not found")
-    except Exception as e:
-        logger.error(f"serve_file error for {path}: {e}")
-        raise HTTPException(status_code=404, detail="File not found")
+    # Photos are now stored as direct Cloudinary URLs in photo_path field
+    # This endpoint is kept for backward compatibility
+    raise HTTPException(status_code=404, detail="File not found")
 
 
 app.include_router(api_router)
@@ -259,13 +213,10 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("startup")
 async def startup():
-    try:
-        if init_storage():
-            logger.info("Object storage initialized")
-        else:
-            logger.warning("Object storage NOT initialized")
-    except Exception as e:
-        logger.error(f"Storage init at startup failed: {e}")
+    if CLOUDINARY_CLOUD_NAME:
+        logger.info("Cloudinary storage configured")
+    else:
+        logger.warning("Cloudinary NOT configured — photo uploads disabled")
 
 
 @app.on_event("shutdown")
